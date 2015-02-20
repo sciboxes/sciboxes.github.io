@@ -79,6 +79,6 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">vagrant@</span>(...)<span class="kw">~</span>$ <span class="kw">salt-call</span> --local state.highstate -l debug</code></pre>
 <p>This will &quot;re-provision&quot; the machine, and is usually faster than getting out of the virtual machine, and invoking <code>vagrant reload --provision</code>.</p>
 <p>It is useful to use this approach when <a href="http://docs.saltstack.com/en/latest/topics/troubleshooting/#using-salt-call">troubleshooting</a> the provisioning phase, and trying different configurations to fix the issue. That is, you can modify one or more salt states, and run <code>salt-call</code> to see the effect.</p>
-<p><em>(<a href="https://github.com/sciboxes">back to github</a>)</em></p>
+<p>(<a href="https://github.com/sciboxes">back to github</a>)</p>
 </body>
 </html>

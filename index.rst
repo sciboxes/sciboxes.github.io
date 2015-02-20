@@ -135,7 +135,7 @@ modify one or more salt states, and run ``salt-call`` to see the effect.
 
 
 
-*(`back to github <https://github.com/sciboxes>`_)*
+(`back to github <https://github.com/sciboxes>`_)
 
 
 .. _vagrant bash completion: https://github.com/kura/vagrant-bash-completion
