@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>sciboxes</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body>
+<div id="header">
+<h1 class="title">sciboxes</h1>
+</div>
+<p>Scripts to provision virtual machines for experimental purposes. The scripts may include the required packages (ipython, jinja2, pyzmq, tornado) to run the ipython notebook.</p>
+<p>At the time of this writing the box used is the official <strong>Ubuntu Server 14.04 LTS (Trusty Tahr)</strong> build as found at <a href="https://vagrantcloud.com/ubuntu/trusty64">Vagrant Cloud</a>.</p>
+<h1 id="prerequisites">Prerequisites</h1>
+<p>You should have recent versions of the following installed:</p>
+<blockquote>
+<ul>
+<li><a href="https://www.vagrantup.com/downloads.html">vagrant</a></li>
+<li><a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox platform package</a></li>
+<li><a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox Extension Pack</a></li>
+</ul>
+</blockquote>
+<p>and the following vagrant plugins:</p>
+<blockquote>
+<ul>
+<li><a href="https://github.com/fgrehm/vagrant-cachier">cachier</a></li>
+<li><a href="https://github.com/dotless-de/vagrant-vbguest">vbguest</a></li>
+</ul>
+</blockquote>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">vagrant</span> plugin install vagrant-cachier vagrant-vbguest</code></pre>
+<h1 id="building-the-virtual-machine">Building the virtual machine</h1>
+<p>If you have an existing directory with code you wish to use inside the VM, you can set the variable <code>LAB_DIR</code> to the path of the directory, e.g.:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">export</span> <span class="ot">LAB_DIR=</span>/home/user/some_project/</code></pre>
+<p>Run:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">vagrant</span> up</code></pre>
+<p><strong>NOTE</strong>: Especially if it is the first time you build the machine, it'll take a while. (<em>Perhaps in between 5 to 10 minutes plus the time to download the ubuntu image.</em>)</p>
+<p>Connect:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">vagrant</span> ssh</code></pre>
+<h2 id="python-virtual-environment">Python virtual environment</h2>
+<p>The box may also be provisioned to have a pre-built python virtual environment, named <code>env</code> under <code>/home/vagrant</code>.</p>
+<p>Active it</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">vagrant@</span>(...)<span class="kw">~</span>$ <span class="kw">source</span> ~/env/bin/activate</code></pre>
+<p>The provisioning phase should also install the python packages listed under <code>~/requirements.txt</code>.</p>
+<h3 id="running-the-ipython-notebook">Running the ipython notebook</h3>
+<p>Before running the notebook, check the ip address (<code>&lt;box_ip&gt;</code>) of the virtual machine. You can run <code>ifconfig</code> to do so.</p>
+<p>In the virtual environment run:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">(env)vagrant@</span>(...)<span class="kw">~</span>$ <span class="kw">ipython</span> notebook --ip=0.0.0.0 --no-browser</code></pre>
+<p>You should then be able to access the notebook from the host machine at <code>http://&lt;box_ip&gt;:8888</code></p>
+<h1 id="vagrant-tips">Vagrant tips</h1>
+<p>Using an automatic <a href="https://github.com/kura/vagrant-bash-completion">vagrant bash completion</a>, may be helpful to speed up your work when using vagrant.</p>
+<p>The first time you run <code>vagrant up</code> the box will be provisioned, but afterwards it will not as this takes more time, and may not be needed. You can instruct vagrant to provision the box like so:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">vagrant</span> up --provision</code></pre>
+<p>If the box is already running then you can use the <code>reload</code> command like so:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">vagrant</span> reload --provision</code></pre>
+<h1 id="running-the-salt-states">Running the salt states</h1>
+<p>You can execute the salt states manually within the virtual machine, using the <a href="http://docs.saltstack.com/en/latest/topics/tutorials/quickstart.html#salt-call">salt-call</a> command:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">vagrant@</span>(...)<span class="kw">~</span>$ <span class="kw">salt-call</span> --local state.highstate -l debug</code></pre>
+<p>This will &quot;re-provision&quot; the machine, and is usually faster than getting out of the virtual machine, and invoking <code>vagrant reload --provision</code>.</p>
+<p>It is useful to use this approach when <a href="http://docs.saltstack.com/en/latest/topics/troubleshooting/#using-salt-call">troubleshooting</a> the provisioning phase, and trying different configurations to fix the issue. That is, you can modify one or more salt states, and run <code>salt-call</code> to see the effect.</p>
+</body>
+</html>
