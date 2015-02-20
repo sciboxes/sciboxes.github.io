@@ -135,10 +135,10 @@ modify one or more salt states, and run ``salt-call`` to see the effect.
 
 
 
+*(`back to github <https://github.com/sciboxes>`_)*
+
+
 .. _vagrant bash completion: https://github.com/kura/vagrant-bash-completion
 .. _salt-call: http://docs.saltstack.com/en/latest/topics/tutorials/quickstart.html#salt-call
 .. _troubleshooting: http://docs.saltstack.com/en/latest/topics/troubleshooting/#using-salt-call
 .. _vagrant cloud: https://vagrantcloud.com/ubuntu/trusty64
-
-
-
